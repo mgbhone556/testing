@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testing/shimmer.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,8 +17,25 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  bool isLoading = true;
+  @override
+  void initState() {
+    super.initState();
+    // Simulate data loading
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        isLoading = false; // Stop shimmer
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,22 +44,24 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(title: const Text('Food Menu'), centerTitle: true),
       body: ListView(
         padding: const EdgeInsets.all(12),
-        children: const [
-          FoodCard(
-            name: 'Chicken Burger',
-            description: 'Juicy grilled chicken with cheese',
-            price: 4500,
-            oldPrice: 5500,
-            isOpen: true,
-          ),
-          FoodCard(
-            name: 'Spicy Pizza',
-            description: 'Hot & spicy pepperoni pizza',
-            price: 12000,
-            oldPrice: 0,
-            isOpen: false,
-          ),
-        ],
+        children: isLoading
+            ? List.generate(4, (_) => const FoodCardShimmer())
+            : const [
+                FoodCard(
+                  name: 'Chicken Burger',
+                  description: 'Juicy grilled chicken with cheese',
+                  price: 4500,
+                  oldPrice: 5500,
+                  isOpen: true,
+                ),
+                FoodCard(
+                  name: 'Spicy Pizza',
+                  description: 'Hot & spicy pepperoni pizza',
+                  price: 12000,
+                  oldPrice: 0,
+                  isOpen: false,
+                ),
+              ],
       ),
     );
   }
