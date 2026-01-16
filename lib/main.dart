@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // 1. Add this import
 import 'package:testing/features/slot/presentation/slot_screen.dart';
 import 'package:testing/shimmer.dart';
 
 void main() {
-  runApp(const MyApp());
+  // 2. Wrap your app in ProviderScope
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
